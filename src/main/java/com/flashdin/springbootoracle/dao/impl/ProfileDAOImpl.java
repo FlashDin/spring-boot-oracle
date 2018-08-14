@@ -22,16 +22,15 @@ public class ProfileDAOImpl implements ProfileDAO {
     @Override
     public Profile save(Profile param) {
         String sql = "insert into table_profile (namaLengkap,alamat,umur,jk) values (?,?,?,?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
+        int rtn = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, param.getNamaLengkap());
             ps.setString(2, param.getAlamat());
             ps.setInt(3, param.getUmur());
             ps.setString(4, param.getJk());
             return ps;
-        }, keyHolder);
-        param.setId(keyHolder.getKey().intValue());
+        });
+        param.setId(rtn);
         return param;
     }
 
